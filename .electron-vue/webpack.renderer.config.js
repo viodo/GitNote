@@ -31,7 +31,7 @@ let rendererConfig = {
   ],
   module: {
     rules: [
-      {
+     /* {
         test: /\.(js|vue)$/,
         enforce: 'pre',
         exclude: /node_modules/,
@@ -41,7 +41,7 @@ let rendererConfig = {
             formatter: require('eslint-friendly-formatter')
           }
         }
-      },
+      },*/
       {
         test: /\.scss$/,
         use: ['vue-style-loader', 'css-loader', 'sass-loader']
