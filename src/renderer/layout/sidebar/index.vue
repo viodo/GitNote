@@ -6,7 +6,7 @@
         <el-button icon="el-icon-plus">新建文档</el-button>
         <div class="router-list">
             <router-link to="/home">首页</router-link>
-            <router-link to="/home">首页</router-link>
+            <router-link to="/login">退出</router-link>
         </div>
     </div>
 </template>

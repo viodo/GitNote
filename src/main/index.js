@@ -23,8 +23,9 @@ function createWindow() {
         height: 563,
         useContentSize: true,
         width: 1000,
-        resizable: true,//可否缩放
-        movable: true//可否移动
+        frame:false,
+        resizable: false, // 可否缩放
+        movable: true // 可否移动
     })
 
     mainWindow.loadURL(winURL)

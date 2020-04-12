@@ -8,6 +8,11 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {
+            path: "/login",
+            name: "Login",
+            component: () => import("@/views/login")
+        },
+        {
             path: '/',
             component: layout,
             children: [
@@ -17,7 +22,6 @@ export default new Router({
                     component: () => import("@/views/home/index")
                 }
             ]
-
         },
         {
             path: '*',
