@@ -28,36 +28,36 @@
 
 <script>
     export default {
-        name: "index",
-        data() {
-            return {
-                form: {
-                    username: "",
-                    password: ""
-                },
-                formRules: {
-                    username: [
-                        {required: true, message: "用户名不能为空", trigger: "blur"}
-                    ],
-                    password: [
-                        {required: true, message: "密码不能为空", trigger: "blur"},
-                        {min: 6, message: "密码至少为六位数", trigger: "blur"}
-                    ]
-                },
-                isRemember: false,
-                isAutoLogin: false
-            }
-        },
-        methods: {
-            login() {
-                this.$refs['login'].validate(valid => {
-                    if (valid) {
-                        this.$message({type: "success", message: "登录成功", duration: 2000})
-                        this.$router.push('/home')
-                    }
-                })
-            }
+      name: 'index',
+      data () {
+        return {
+          form: {
+            username: '',
+            password: ''
+          },
+          formRules: {
+            username: [
+              {required: true, message: '用户名不能为空', trigger: 'blur'}
+            ],
+            password: [
+              {required: true, message: '密码不能为空', trigger: 'blur'},
+              {min: 6, message: '密码至少为六位数', trigger: 'blur'}
+            ]
+          },
+          isRemember: false,
+          isAutoLogin: false
         }
+      },
+      methods: {
+        login () {
+          this.$refs['login'].validate(valid => {
+            if (valid) {
+              this.$message({type: 'success', message: '登录成功', duration: 2000})
+              this.$router.push('/home')
+            }
+          })
+        }
+      }
     }
 </script>
 
