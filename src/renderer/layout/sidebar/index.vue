@@ -5,8 +5,8 @@
         </div>
         <el-button icon="el-icon-plus">新建文档</el-button>
         <div class="router-list">
-            <router-link to="/home">首页</router-link>
-            <router-link to="/login">退出</router-link>
+            <router-link to="/home">最新文档</router-link>
+            <router-link to="/login">我的文件夹</router-link>
         </div>
     </div>
 </template>
