@@ -44,13 +44,13 @@
 
 <script>
     export default {
-        name: 'index',
-        data() {
-            return {
-                searchText: "",
-                title: ""
-            }
+      name: 'index',
+      data () {
+        return {
+          searchText: '',
+          title: ''
         }
+      }
     }
 </script>
 

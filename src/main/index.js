@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, BrowserWindow, Menu,ipcMain} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -23,9 +23,11 @@ function createWindow () {
     height: 520,
     useContentSize: true,
     width: 680,
+    center: true,
     frame: false,
-    resizable: false, // 可否缩放
-    movable: true // 可否移动
+    resizable: true, // 可否缩放
+    movable: true, // 可否移动
+    webPreferences: {webSecurity: false}
   })
   mainWindow.loadURL(winURL)
   /* 隐藏electron创听的菜单栏 */
@@ -49,11 +51,16 @@ app.on('activate', () => {
     createWindow()
   }
 })
+ipcMain.on('min', e=> mainWindow.minimize());
+ipcMain.on('max', e=> mainWindow.maximize());
+ipcMain.on('close', e=> mainWindow.close());
 
-ipcMain.on('changWindowSize', e =>
+ipcMain.on('changWindowSize', () =>
   mainWindow.setSize(1440, 900)
 )
-
+ipcMain.on('resetLoginSize', () =>
+  mainWindow.setSize(680, 520)
+)
 
 /**
  * Auto Updater

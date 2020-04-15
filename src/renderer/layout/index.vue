@@ -10,16 +10,17 @@
 </template>
 
 <script>
-  import Sidebar from "./sidebar"
-
+  import Sidebar from './sidebar'
+  const {remote} = require('electron')
   export default {
-    name: "index",
+    name: 'index',
     components: {Sidebar},
     computed: {
-      key() {
+      key () {
         return this.$route.path
       }
-    }
+    },
+
   }
 </script>
 
