@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, BrowserWindow, Menu} from 'electron'
+import {app, BrowserWindow, Menu,ipcMain} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -20,14 +20,13 @@ function createWindow () {
      * Initial window options
      */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 520,
     useContentSize: true,
-    width: 1000,
+    width: 680,
     frame: false,
     resizable: false, // 可否缩放
     movable: true // 可否移动
   })
-
   mainWindow.loadURL(winURL)
   /* 隐藏electron创听的菜单栏 */
   Menu.setApplicationMenu(null)
@@ -50,6 +49,11 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on('changWindowSize', e =>
+  mainWindow.setSize(1440, 900)
+)
+
 
 /**
  * Auto Updater

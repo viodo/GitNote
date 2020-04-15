@@ -11,6 +11,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
+function resolve(dir) {
+  return path.join(__dirname, dir)
+}
+
+
 let webConfig = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
@@ -69,8 +74,20 @@ let webConfig = {
           }
         }
       },
+      //  测试svg使用
+      // {
+      //   test: /\.svg$/,
+      //   include: [ path.resolve(__dirname, '../src/renderer/icons') ],
+      //   use: {
+      //     loader: 'svg-sprite-loader',
+      //     options: {
+      //       symbolId: 'icon-[name]'
+      //     }
+      //   }
+      // },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        // exclude: [path.resolve(__dirname, '../src/renderer/icons')],
         use: {
           loader: 'url-loader',
           query: {
