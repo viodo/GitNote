@@ -71,9 +71,9 @@ export default {
     return {
       tabName: "Token",
       form: {
-        username: "viodo",
-        password: "cxc19941217",
-        token: "0db7094ad7e2f829bdc430b79eca46bc97712d6f"
+        username: "",
+        password: "",
+        token: ""
       },
       formRules: {
         token: [{ required: true, message: "token不能为空", trigger: "blur" }],
