@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, ipcMain } from 'electron'
+import {app, BrowserWindow, Menu, ipcMain} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -10,15 +10,16 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow
+let mainWindow, calendarWin;
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
+//  创建主窗口
 function createWindow() {
   /**
-     * Initial window options
-     */
+   * Initial window options
+   */
   mainWindow = new BrowserWindow({
     height: 520,
     useContentSize: true,
@@ -27,7 +28,7 @@ function createWindow() {
     frame: false,
     resizable: true, // 可否缩放
     movable: true, // 可否移动
-    webPreferences: { webSecurity: false }
+    webPreferences: {webSecurity: false}
   })
   mainWindow.loadURL(winURL)
   /* 隐藏electron创听的菜单栏 */
@@ -35,6 +36,26 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+}
+
+// 创建主业务窗口方法
+function openCalendarWindow() {
+  calendarWin = new BrowserWindow({
+    width: 1200,
+    height: 700,
+    parent: mainWindow, //win是主窗口
+    center: true,
+    frame: false,
+    resizable: true, // 可否缩放
+    movable: true, // 可否移动
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+  calendarWin.loadURL(winURL + '#/home')
+  calendarWin.on('closed', () => {
+    calendarWin = null
   })
 }
 
@@ -51,17 +72,15 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
 ipcMain.on('min', e => mainWindow.minimize())
 ipcMain.on('max', e => mainWindow.maximize())
 ipcMain.on('close', e => mainWindow.close())
 
-ipcMain.on('changWindowSize', () =>
-  mainWindow.setSize(1440, 900)
+ipcMain.on('openCalendarWindow', e =>
+  mainWindow.hide()
+  openCalendarWindow()
 )
-ipcMain.on('resetLoginSize', () =>
-  mainWindow.setSize(680, 520)
-)
-
 /**
  * Auto Updater
  *
@@ -81,3 +100,4 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
  */
+

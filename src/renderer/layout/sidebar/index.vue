@@ -25,9 +25,6 @@
     },
     mounted() {
       this.targetId = this.id;
-      notificationCenter.on("onClosePop", this.onClosePop);
-      this.initMenu();
-      ipcRenderer.send('changWindowSize')
     },
     methods: {
       rightClick: function(id) {
@@ -50,9 +47,8 @@
       },
       logut() {
         localStorage.removeItem('user')
-        ipcRenderer.send('resetLoginSize')
+        ipcRenderer.send('close')
         this.$router.push('/')
-
       }
     }
   }

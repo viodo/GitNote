@@ -1,10 +1,11 @@
 <template>
   <div class="login-box">
     <div class="login-bg">
-      <img src="http://placehold.it/400x400" alt />
+      <img src="http://placehold.it/400x400" alt/>
     </div>
-    <div class="extra" @click="close">
-      <i class="el-icon-close"></i>
+    <div class="extra">
+      <i class="el-icon-minus" @click="min"></i>
+      <i class="el-icon-close" @click="close"></i>
     </div>
     <div class="content">
       <div class="project">
@@ -20,9 +21,6 @@
       </div>
 
       <el-form ref="login" :model="form" :rules="formRules">
-        <el-form-item prop="address">
-          <el-input v-model="form.address" placeholder="项目链接"></el-input>
-        </el-form-item>
         <el-form-item prop="username">
           <el-input v-model="form.username" placeholder="用户名"></el-input>
         </el-form-item>
@@ -46,152 +44,154 @@
 </template>
 
 <script>
-const { ipcRenderer } = require("electron");
-const { remote } = require("electron");
+  const {ipcRenderer} = require("electron");
+  const {remote} = require("electron");
 
-export default {
-  name: "index",
-  data() {
-    return {
-      form: {
-        username: "",
-        password: "",
-        address: ""
-      },
-      formRules: {
-        username: [
-          { required: true, message: "用户名不能为空", trigger: "blur" }
-        ],
-        password: [
-          { required: true, message: "密码不能为空", trigger: "blur" },
-          { min: 6, message: "密码至少为六位数", trigger: "blur" }
-        ]
-      },
-      isRemember: false,
-      isAutoLogin: false,
-      mainWindow: ""
-    };
-  },
-  mounted() {},
-  methods: {
-    login() {
-      this.$refs["login"].validate(valid => {
-        if (valid) {
-          localStorage.user = JSON.stringify(this.form);
-          this.$message({
-            type: "success",
-            message: "登录成功",
-            duration: 2000
-          });
-          this.$router.push("/home");
-          ipcRenderer.send("max");
-        }
-      });
+  export default {
+    name: "index",
+    data() {
+      return {
+        form: {
+          username: "",
+          password: ""
+        },
+        formRules: {
+          username: [
+            {required: true, message: "用户名不能为空", trigger: "blur"}
+          ],
+          password: [
+            {required: true, message: "密码不能为空", trigger: "blur"},
+            {min: 6, message: "密码至少为六位数", trigger: "blur"}
+          ]
+        },
+        isRemember: false,
+        isAutoLogin: false,
+        mainWindow: ""
+      };
     },
+    mounted() {
+    },
+    methods: {
+      login() {
+        this.$refs["login"].validate(valid => {
+          if (valid) {
+            localStorage.user = JSON.stringify(this.form);
+            this.$message({
+              type: "success",
+              message: "登录成功",
+              duration: 2000
+            });
+            ipcRenderer.send("openCalendarWindow");
+          }
+        });
+      },
 
-    close() {
-      ipcRenderer.send("close");
+      close() {
+        ipcRenderer.send("close");
+      },
+      min() {
+        ipcRenderer.send("min");
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped lang="scss">
-.login-box {
-  -webkit-app-region: drag;
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-  .login-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 400px;
+  .login-box {
+    -webkit-app-region: drag;
+    position: relative;
     height: 100%;
-    img {
-      width: 100%;
+    overflow: hidden;
+    .login-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 400px;
       height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
-  }
-  .extra {
-    position: fixed;
-    top: 0;
-    right: 10px;
-    i {
-      -webkit-app-region: no-drag;
-      font-size: 24px;
-      padding: 10px;
-      cursor: pointer;
-      color: #ababab;
-    }
-  }
-  .content {
-    margin-left: 400px;
-    height: 100%;
-    padding: 20px 30px;
-    .project {
-      display: flex;
-      justify-content: center;
-      padding: 0 20px;
-      .project-img {
+    .extra {
+      position: fixed;
+      top: 0;
+      right: 10px;
+      i {
         -webkit-app-region: no-drag;
-        display: inline-block;
-        margin: 70px auto 70px;
-        width: 60px;
-        .el-image {
-          border-radius: 100%;
+        font-size: 20px;
+        padding: 10px;
+        cursor: pointer;
+        color: #ababab;
+      }
+    }
+    .content {
+      margin-left: 400px;
+      height: 100%;
+      padding: 20px 30px;
+      .project {
+        display: flex;
+        justify-content: center;
+        padding: 0 20px;
+        .project-img {
+          -webkit-app-region: no-drag;
+          display: inline-block;
+          margin: 70px auto 70px;
+          width: 60px;
+          .el-image {
+            border-radius: 100%;
+          }
+          p {
+            text-align: center;
+            font-size: 14px;
+          }
         }
-        p {
-          text-align: center;
+      }
+      .el-form {
+        -webkit-app-region: no-drag;
+        margin-bottom: 20px;
+        .el-input {
+          /deep/ .el-input__inner {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            border-radius: 0;
+            font-size: 16px;
+            padding: 10px 50px 10px 5px;
+          }
+        }
+        .login {
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 6px;
+        }
+      }
+      .tools {
+        -webkit-app-region: no-drag;
+        position: absolute;
+        bottom: 20px;
+        width: 220px;
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden;
+        .left {
+          float: left;
+          .el-checkbox {
+            display: block;
+            line-height: 30px;
+          }
+        }
+        .right {
+          color: #606266;
+          cursor: pointer;
+          user-select: none;
+          float: right;
+          display: inline-block;
+          padding-left: 10px;
+          line-height: 30px;
           font-size: 14px;
         }
       }
     }
-    .el-form {
-      -webkit-app-region: no-drag;
-      margin-bottom: 20px;
-      .el-input {
-        /deep/ .el-input__inner {
-          border: none;
-          border-bottom: 1px solid #ccc;
-          border-radius: 0;
-          font-size: 16px;
-          padding: 10px 50px 10px 5px;
-        }
-      }
-      .login {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 6px;
-      }
-    }
-    .tools {
-      -webkit-app-region: no-drag;
-      position: absolute;
-      bottom: 20px;
-      width: 220px;
-      display: flex;
-      justify-content: space-between;
-      overflow: hidden;
-      .left {
-        float: left;
-        .el-checkbox {
-          display: block;
-          line-height: 30px;
-        }
-      }
-      .right {
-        color: #606266;
-        cursor: pointer;
-        user-select: none;
-        float: right;
-        display: inline-block;
-        padding-left: 10px;
-        line-height: 30px;
-        font-size: 14px;
-      }
-    }
   }
-}
 </style>
