@@ -1,5 +1,5 @@
 <template>
-    <svg :class="svgClass" aria-hidden="true" v-on="$listeners">
+    <svg :class="svgClass" aria-hidden="true" v-on="$listeners" :style="{fontSize: size}">
         <use :xlink:href="iconName"/>
     </svg>
 </template>
@@ -15,6 +15,10 @@
         className: {
           type: String,
           default: ''
+        },
+        size: {
+          type: String,
+          default: ""
         }
       },
       computed: {

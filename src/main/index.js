@@ -21,9 +21,9 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 520,
+    height: 500,
     useContentSize: true,
-    width: 680,
+    width: 300,
     center: true,
     frame: false,
     resizable: true, // 可否缩放
@@ -40,7 +40,7 @@ function createWindow() {
 }
 
 // 创建主业务窗口方法
-function openCalendarWindow() {
+function openWindow() {
   calendarWin = new BrowserWindow({
     width: 1200,
     height: 700,
@@ -77,10 +77,10 @@ ipcMain.on('min', e => mainWindow.minimize())
 ipcMain.on('max', e => mainWindow.maximize())
 ipcMain.on('close', e => mainWindow.close())
 
-ipcMain.on('openCalendarWindow', e =>
-  mainWindow.hide()
-  openCalendarWindow()
-)
+ipcMain.on('openCalendarWindow', e => {
+  mainWindow.hide();
+  openWindow()
+})
 /**
  * Auto Updater
  *
