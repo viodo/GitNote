@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, BrowserWindow, Menu, ipcMain} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, shell} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -77,10 +77,17 @@ ipcMain.on('min', e => mainWindow.minimize())
 ipcMain.on('max', e => mainWindow.maximize())
 ipcMain.on('close', e => mainWindow.close())
 
-ipcMain.on('openCalendarWindow', e => {
+// 打开新窗体
+ipcMain.on('openWindow', e => {
   mainWindow.hide();
   openWindow()
 })
+
+// 用系统默认浏览器打开地址
+ipcMain.on('openUrl', (e, url) => {
+  shell.openExternal(url)
+})
+
 /**
  * Auto Updater
  *
