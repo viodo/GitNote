@@ -1,7 +1,7 @@
-import Vue from "vue"
+import Vue from 'vue'
 import {Message} from 'element-ui'
 
-const defDuration = 2000;
+const defDuration = 2000
 
 /**
  * 错误信息提示
@@ -9,7 +9,7 @@ const defDuration = 2000;
  * @param duration
  * @returns {*}
  */
-export function errorMsg(message, duration) {
+export function errorMsg (message, duration) {
   return Message({
     message: message || '',
     type: 'error',
@@ -23,7 +23,7 @@ export function errorMsg(message, duration) {
  * @param duration
  * @returns {*}
  */
-export function successMsg(message, duration) {
+export function successMsg (message, duration) {
   return Message({
     message: message || '',
     type: 'success',
@@ -37,7 +37,7 @@ export function successMsg(message, duration) {
  * @param duration
  * @returns {*}
  */
-export function warningMsg(message, duration) {
+export function warningMsg (message, duration) {
   return Message({
     message: message || '',
     type: 'warning',
@@ -51,7 +51,7 @@ export function warningMsg(message, duration) {
  * @param duration
  * @returns {*}
  */
-export function infoMsg(message, duration) {
+export function infoMsg (message, duration) {
   return Message({
     message: message || '',
     type: 'info',
@@ -59,11 +59,9 @@ export function infoMsg(message, duration) {
   })
 }
 
-
-
 // 复制错误信息
-function copyDocument(id) {
-  var Url2 = document.getElementById(id);
-  Url2.select(); // 选择对象
-  document.execCommand("Copy"); // 执行浏览器复制命令
+function copyDocument (id) {
+  var Url2 = document.getElementById(id)
+  Url2.select() // 选择对象
+  document.execCommand('Copy') // 执行浏览器复制命令
 }

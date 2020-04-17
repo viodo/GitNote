@@ -104,7 +104,7 @@
             //   message: "登录成功",
             //   duration: 2000
             // });
-            // ipcRenderer.send('openWindow')
+            ipcRenderer.send('openWindow')
             let github
             if (type === 'token') {
               github = new GitHub({token: this.form.token})
@@ -130,11 +130,18 @@
                     // step2: 查看该用户是否有[用户名]Note 仓库
                     me.listRepos((err, res) => {
                       console.log(res)
-                      for (let repo in res) {
+                      let resList = res.filter(repo => repo.name === this.form.username + 'Notebook' && repo.owner.login)
+                      console.log(resList,'resList')
+                      if(resList.length) {
+
+                      } else {
+
+                      }
+                   /*   for (let repo in res) {
                         if (repo.name === this.form.username + 'Notebook' && repo.owner.login) {
 
                         }
-                      }
+                      }*/
                     })
                   })
                 }

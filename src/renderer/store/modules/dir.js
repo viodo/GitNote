@@ -9,10 +9,10 @@ const mutations = {
 }
 
 const actions = {
-  setDirList({commit}, state) {
-    console.log(state,'lllllllll')
+  setDirList ({commit}, state) {
+    console.log(state, 'lllllllll')
     commit('SET_LIST', state)
-  },
+  }
 }
 
 export default {

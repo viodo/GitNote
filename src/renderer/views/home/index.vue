@@ -2,7 +2,7 @@
   <div class="home">
     <div class="list">
       <div class="list-hd">
-        <i class="list-back el-icon-plus"></i>
+        <i class="list-back el-icon-plus" @click="pathBack"></i>
         <el-input v-model="searchText" placeholder="搜索..." prefix-icon="el-icon-search">
         </el-input>
         <el-dropdown trigger="click" class="list-setting">
@@ -19,8 +19,12 @@
       </div>
       <div class="list-bd widget-scroller widget-scroller-wrap">
         <ul>
-          <li class="list-li file-item selected" v-for="(item,index) in list" :key="index">
-            <div class="title"><i class="el-icon-plus"></i>{{item.name}}</div>
+          <li class="list-li file-item selected" v-for="(item,index) in list" :key="index" @click="openDir(item)">
+            <div class="title">
+                <i class="folder-icon el-icon-folder-opened" v-if="item.type === 'dir'"></i>
+                <i class="folder-icon el-icon-document" v-else></i>
+                {{item.name}}
+            </div>
             <div class="date-size">
               <span class="file-date">2020-01-01</span>
               <span class="file-size">202k</span>
@@ -43,32 +47,118 @@
 </template>
 
 <script>
+  import os from 'os'
+  import fs from 'fs'
+  import path from 'path'
   export default {
     name: 'index',
-    data() {
+    data () {
       return {
         searchText: '',
-        title: '',
-      }
-    },
-    watch:{
-      "store.state.dir.list"(val) {
-        console.log(val)
+        title: ''
       }
     },
     computed: {
-      list() {
-        console.log(this.$store.state.dir.list)
+      list () {
         return this.$store.state.dir.list
       }
     },
-    mounted() {
-
+    mounted () {
+      var root = path.join(os.homedir(), '.config')
+      this.treeData = [{
+        type: 'dir',
+        name: '我的文件夹',
+        children: []
+      }]
+      // 调用函数遍历根目录，同时传递 文件夹路径和对应的数组
+      // 请使用同步读取
+      this.fileDir(root, this.treeData[0].children)
     },
-    methods:{
-      init() {
-        console.log(this.$store.state,'list')
-        console.log(this.$store.state.dir.list,'list')
+    methods: {
+      init () {
+        console.log(this.$store.state, 'list')
+        console.log(this.$store.state.dir.list, 'list')
+      },
+      //  展开文件夹
+      openDir(data) {
+        console.log(data)
+        this.dirList = []
+        if (data.type == 'dir' && data.name !== '我的文件夹') {
+          let root = path.join(os.homedir(), '.config')
+          let filesList = this.treeData[0].children
+          this.findFileDisplay(filesList, data.name, root)
+          this.fileDisplay(this.filePath, this.dirList)
+          this.$store.dispatch('setDirList', this.dirList)
+        }
+      },
+      //  遍历文件夹
+      fileDir(dirPath, arr) {
+        let filesList = fs.readdirSync(dirPath), j = 0;
+        for (let i = 0; i < filesList.length; i++) {
+          // 拼接当前文件的路径(上一层路径+当前file的名字)
+          let filePath = path.join(dirPath, filesList[i])
+          // 根据文件路径获取文件信息，返回一个fs.Stats对象
+          let stats = fs.statSync(filePath)
+          if (stats.isDirectory()) {
+            let fileObj = {}
+            fileObj.name = filesList[i]
+            fileObj.type = 'dir'
+            fileObj.children = []
+            arr.push(fileObj)
+            // 递归调用
+            this.fileDir(filePath, arr[j].children)
+            j++
+          }
+        }
+      },
+      //  遍历文件及文件夹
+      fileDisplay(dirPath, arr) {
+        var filesList = fs.readdirSync(dirPath)
+        for (var i = 0; i < filesList.length; i++) {
+          // 描述此文件/文件夹的对象
+          var fileObj = {}
+          fileObj.name = filesList[i]
+          // 拼接当前文件的路径(上一层路径+当前file的名字)
+          var filePath = path.join(dirPath, filesList[i])
+          // 根据文件路径获取文件信息，返回一个fs.Stats对象
+          var stats = fs.statSync(filePath)
+          if (stats.isDirectory()) {
+            // 如果是文件夹
+            fileObj.type = 'dir'
+            fileObj.children = []
+            arr.push(fileObj)
+            // 递归调用
+            this.fileDisplay(filePath, arr[i].children)
+          } else {
+            // //不是文件夹,则添加type属性为文件后缀名
+            fileObj.type = path.extname(filesList[i]).substring(1)
+            arr.push(fileObj)
+          }
+        }
+      },
+      // 组装目录路径
+      findFileDisplay(filesList, name, dirPath) {
+        for (var i = 0; i < filesList.length; i++) {
+          // 拼接当前文件的路径(上一层路径+当前file的名字)
+          if (filesList[i].type == 'dir') {
+            var filePath = path.join(dirPath, filesList[i].name)
+            if (filesList[i].name == name) {
+              this.filePath = filePath
+            } else {
+              if (filesList[i].children) {
+                this.findFileDisplay(filesList[i].children, name, filePath)
+              }
+            }
+          }
+        }
+      },
+      pathBack() {
+        let arr = this.filePath.split('\\')
+        arr.pop()
+        this.filePath = arr.join('\\')
+        this.dirList = []
+        this.fileDisplay(this.filePath, this.dirList)
+        this.$store.dispatch('setDirList', this.dirList)
       }
     }
   }
