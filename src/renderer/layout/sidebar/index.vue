@@ -4,13 +4,13 @@
             <img src="http://placehold.it/60x60" alt="">
         </div>
         <el-button class="no-drag" icon="el-icon-plus">新建文档</el-button>
-        <div class="router-list no-drag">
-            <router-link class="item" to="/home">最新文档</router-link>
-            <el-tree
-                    :data="treeData"
+        <div class="router-list">
+            <router-link class="item no-drag" to="/home">最新文档</router-link>
+            <el-tree :data="treeData" class="no-drag"
                     :props="treeProps"
                     accordion
                     node-key="id"
+                     :expand-on-click-node="false"
                     @node-click="treeClick">
         <span class="custom-tree-node" slot-scope="{ node, data }" @contextmenu="rightClick(node,data)">
           <i class="folder-icon el-icon-folder-opened" v-if="data.type === 'dir'"></i>
@@ -18,8 +18,8 @@
           <span>{{ node.label }}</span>
         </span>
             </el-tree>
-            <div class="item" @click="logut">退出</div>
         </div>
+        <div class="logout no-drag" @click="logut">重新登录</div>
     </div>
 </template>
 
@@ -163,7 +163,8 @@
       },
       logut() {
         localStorage.removeItem('user')
-        ipcRenderer.send('close')
+        // ipcRenderer.send('close')
+        ipcRenderer.send('toLogin')
         this.$router.push('/')
       }
     }
@@ -184,7 +185,6 @@
         left: 0;
         z-index: 1001;
         overflow: hidden;
-        padding-right: 10px;
         text-align: center;
         .avatar {
             width: 80px;
@@ -197,6 +197,8 @@
         .router-list {
             text-align: left;
             padding: 10px 10px;
+            height: calc(100vh - 204px);
+            overflow-y: auto;
             .item {
                 display: block;
                 color: #686868;
@@ -210,11 +212,25 @@
                     color: #f6ce62;
                     font-size: 16px;
                 }
+                .custom-tree-node {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
                 .el-tree-node:focus > .el-tree-node__content {
                     color: #fff;
                     background-color: $--color-primary;
                 }
             }
+        }
+        .logout {
+            border-top: 1px solid #E0E1E5;
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 30px;
+            padding: 0  20px;
+            color: #393939;
+            cursor: pointer;
         }
     }
 </style>

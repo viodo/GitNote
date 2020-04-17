@@ -72,15 +72,23 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
+//  最小化
 ipcMain.on('min', e => mainWindow.minimize())
+//  最大化
 ipcMain.on('max', e => mainWindow.maximize())
+//  关闭
 ipcMain.on('close', e => mainWindow.close())
 
 // 打开新窗体
 ipcMain.on('openWindow', e => {
   mainWindow.hide()
   openWindow()
+})
+
+// 重新登录
+ipcMain.on('toLogin', (e, url) => {
+  calendarWin.hide()
+  mainWindow.show()
 })
 
 // 用系统默认浏览器打开地址
