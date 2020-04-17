@@ -1,3 +1,8 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './element-ui.scss';
+@import "~element-ui/packages/theme-chalk/src/index";
+
 * {
   margin: 0;
   padding: 0;

@@ -50,12 +50,12 @@
       }
     },
     mounted() {
-      this.targetId = this.id;
+      this.targetId = this.id
     },
     methods: {
       rightClick(id) {
-        const that = this, {Menu, MenuItem} = remote; // 需要用到 electron
-        const menu = new Menu(); // 右键菜单
+        const that = this, {Menu, MenuItem} = remote // 需要用到 electron
+        const menu = new Menu() // 右键菜单
         menu.append(new MenuItem({
           label: 'delete',
           click: function () {
@@ -82,10 +82,11 @@
 </script>
 
 <style scoped lang="scss">
+
   .sidebar {
     transition: width .28s;
     width: 210px !important;
-    background-color: #304156;
+    background-color: #f5f5f5;
     height: 100%;
     position: fixed;
     top: 0;

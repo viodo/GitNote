@@ -56,43 +56,41 @@
 </template>
 
 <script>
-const { ipcRenderer } = require("electron");
-
-import GitHub from "github-api";
-import os from "os";
-import path from "path";
-import fs from "fs";
-
-
+import GitHub from 'github-api'
+import os from 'os'
+import path from 'path'
+import fs from 'fs'
+import {errorMsg} from "@/utils/msg"
+const { ipcRenderer } = require('electron')
 
 export default {
-  name: "index",
-  data() {
+  name: 'index',
+  data () {
     return {
-      tabName: "Token",
+      tabName: 'Token',
       form: {
-        username: "",
-        password: "",
-        token: ""
+        username: '',
+        password: '',
+        token: ''
       },
       formRules: {
-        token: [{ required: true, message: "token不能为空", trigger: "blur" }],
+        token: [{ required: true, message: 'token不能为空', trigger: 'blur' }],
         username: [
-          { required: true, message: "用户名不能为空", trigger: "blur" }
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: "密码不能为空", trigger: "blur" },
-          { min: 6, message: "密码至少为六位数", trigger: "blur" }
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { min: 6, message: '密码至少为六位数', trigger: 'blur' }
         ]
       },
       isRemember: false,
       isAutoLogin: false,
-      mainWindow: ""
-    };
+      mainWindow: ''
+    }
   },
   methods: {
-    login(type) {
-      this.$refs["login"].validate(valid => {
+    login (type) {
+      this.$refs['login'].validate(valid => {
         if (valid) {
           // localStorage.user = JSON.stringify(this.form);
           // this.$message({
@@ -101,48 +99,48 @@ export default {
           //   duration: 2000
           // });
           // ipcRenderer.send("openWindow");
-          let github;
-          if (type === "token") {
-            github = new GitHub({ token: this.form.token });
+          let github
+          if (type === 'token') {
+            github = new GitHub({ token: this.form.token })
           } else {
             github = new GitHub({
               username: this.form.username,
               password: this.form.password
-            });
+            })
           }
-          const me = github.getUser();
-          me.getProfile(function(err, res) {
+          const me = github.getUser()
+          me.getProfile(function (err, res) {
             if (!err) {
               // 登录成功
-              console.log(res);
+              console.log(res)
               // 初始化账号文件夹
               // step1: 判断有没有UserDir/.GitNote/[account]/文件夹
-              let accountPath = path.join(os.homedir(), ".GitNote", res.login);
+              let accountPath = path.join(os.homedir(), '.GitNote', res.login)
               if (!fs.existsSync(accountPath)) {
                 // 不存在则创建,recursive递归创建
                 fs.mkdir(accountPath, { recursive: true }, err => {
-                  if (err) throw err;
-                  console.log("文件夹创建成功");
+                  if (err) throw err
+                  console.log('文件夹创建成功')
                   // step2: 进入主界面
                   // setp3: 异步克隆仓库，刷新主界面数据
-                });
+                })
               }
             }
-          });
+          })
         }
-      });
+      })
     },
-    close() {
-      ipcRenderer.send("close");
+    close () {
+      ipcRenderer.send('close')
     },
-    min() {
-      ipcRenderer.send("min");
+    min () {
+      ipcRenderer.send('min')
     },
-    openCreateToken() {
-      ipcRenderer.send("openUrl", "https://github.com/settings/tokens/new");
+    openCreateToken () {
+      ipcRenderer.send('openUrl', 'https://github.com/settings/tokens/new')
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

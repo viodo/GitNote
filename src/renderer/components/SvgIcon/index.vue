@@ -18,7 +18,7 @@
         },
         size: {
           type: String,
-          default: ""
+          default: ''
         }
       },
       computed: {

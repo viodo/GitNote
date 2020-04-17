@@ -10,13 +10,13 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow, calendarWin;
+let mainWindow, calendarWin
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
 //  创建主窗口
-function createWindow() {
+function createWindow () {
   /**
    * Initial window options
    */
@@ -40,11 +40,11 @@ function createWindow() {
 }
 
 // 创建主业务窗口方法
-function openWindow() {
+function openWindow () {
   calendarWin = new BrowserWindow({
     width: 1200,
     height: 700,
-    parent: mainWindow, //win是主窗口
+    parent: mainWindow, // win是主窗口
     center: true,
     frame: false,
     resizable: true, // 可否缩放
@@ -79,7 +79,7 @@ ipcMain.on('close', e => mainWindow.close())
 
 // 打开新窗体
 ipcMain.on('openWindow', e => {
-  mainWindow.hide();
+  mainWindow.hide()
   openWindow()
 })
 
@@ -107,4 +107,3 @@ app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
  */
-
