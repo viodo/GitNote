@@ -2,6 +2,7 @@
 
 import {app, BrowserWindow, Menu, ipcMain, shell} from 'electron'
 import '../renderer/store'
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -30,7 +31,9 @@ function createWindow () {
     movable: true, // 可否移动
     webPreferences: {webSecurity: false}
   })
-  mainWindow.loadURL(winURL)
+  mainWindow.loadURL(winURL, {
+    userAgent: 'GitNote/0.0.1'
+  })
   /* 隐藏electron创听的菜单栏 */
   Menu.setApplicationMenu(null)
 
@@ -94,6 +97,22 @@ ipcMain.on('toLogin', (e, url) => {
 // 用系统默认浏览器打开地址
 ipcMain.on('openUrl', (e, url) => {
   shell.openExternal(url)
+})
+
+let GitHub = require('github-api')
+ipcMain.on('createRepo', (e, url) => {
+  let github = new GitHub({
+    username: 'viodo',
+    password: 'cxc19941217'
+  })
+  let user = github.getUser()
+  let repoDef = {
+    name: 'test'
+  }
+  user.createRepo(repoDef, (err, repo) => {
+    console.log(err)
+    console.log(repo)
+  })
 })
 
 /**

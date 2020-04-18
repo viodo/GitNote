@@ -32,7 +32,7 @@
 
   export default {
     name: 'index',
-    data() {
+    data () {
       return {
         isShowMember: false,
         menu: null,
@@ -45,7 +45,7 @@
         filePath: ''
       }
     },
-    mounted() {
+    mounted () {
       this.targetId = this.id
 
       // 设置根目录
@@ -61,7 +61,7 @@
     },
     methods: {
       //  右键菜单
-      rightClick(node, data) {
+      rightClick (node, data) {
         console.log(node, data)
         const that = this, {Menu, MenuItem} = remote // 需要用到 electron
         const menu = new Menu() // 右键菜单
@@ -89,7 +89,7 @@
         menu.popup(remote.getCurrentWindow())
       },
       //  查询该文件夹下的内容
-      treeClick(data, node, self) {
+      treeClick (data, node, self) {
         // console.log(data, node, self)
         this.dirList = []
         if (data.type == 'dir' && data.name !== '我的文件夹') {
@@ -101,7 +101,7 @@
         }
       },
       //  遍历文件及文件夹
-      fileDisplay(dirPath, arr) {
+      fileDisplay (dirPath, arr) {
         var filesList = fs.readdirSync(dirPath)
         for (var i = 0; i < filesList.length; i++) {
           // 描述此文件/文件夹的对象
@@ -126,8 +126,8 @@
         }
       },
       //  遍历文件夹
-      fileDir(dirPath, arr) {
-        let filesList = fs.readdirSync(dirPath), j = 0;
+      fileDir (dirPath, arr) {
+        let filesList = fs.readdirSync(dirPath), j = 0
         for (let i = 0; i < filesList.length; i++) {
           // 拼接当前文件的路径(上一层路径+当前file的名字)
           let filePath = path.join(dirPath, filesList[i])
@@ -146,7 +146,7 @@
         }
       },
       // 组装目录路径
-      findFileDisplay(filesList, name, dirPath) {
+      findFileDisplay (filesList, name, dirPath) {
         for (var i = 0; i < filesList.length; i++) {
           // 拼接当前文件的路径(上一层路径+当前file的名字)
           if (filesList[i].type == 'dir') {
@@ -161,7 +161,7 @@
           }
         }
       },
-      logut() {
+      logut () {
         localStorage.removeItem('user')
         // ipcRenderer.send('close')
         ipcRenderer.send('toLogin')

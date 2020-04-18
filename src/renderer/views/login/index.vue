@@ -64,6 +64,7 @@
   import os from 'os'
   import path from 'path'
   import fs from 'fs'
+  // import Git from 'nodegit'
   import {mkdirs} from '@/utils/file'
 
   const {ipcRenderer} = require('electron')
@@ -137,25 +138,36 @@
                         console.log(repoList, 'resList')
                         if (!repoList.length) {
                           console.log('创建仓库 && 克隆仓库')
-                          const repoInfo = {
-                            name: this.form.username + 'Notebook',
-                            auto_init: true
-                          }
+                          ipcRenderer.send('createRepo')
+                          // const repoInfo = {
+                          //   name: this.form.username + 'Notebook',
+                          //   auto_init: true
+                          // }
                           // http://github-tools.github.io/github/docs/3.2.3/User.js.html#line211
                           // https://developer.github.com/v3/repos/#create
-                          user.createRepo(repoInfo, (err, repo) => {
-                            if (!err) {
-                              console.log(repo)
-                            }
-                          })
+                          // TODO bug
+                          // user.createRepo(repoInfo, (err, repo) => {
+                          //   if (!err) {
+                          //     console.log(repo)
+                          //     console.log('开始克隆仓库')
+                          //     // Git.Clone(reporUrl, accountPath).then(repo => {
+                          //     //   console.log('克隆仓库完成', repo)
+                          //     // })
+                          //   }
+                          // })
                         } else {
-                          console.log('克隆仓库')
+                          console.log('开始克隆仓库')
+                          // Git.Clone(reporUrl, accountPath).then(repo => {
+                          //   console.log('克隆仓库完成', repo)
+                          // })
                         }
                       }
                     })
                   })
                 }
                 this.loading = false
+                // ipcRenderer.send('openWindow')
+
               } else {
                 this.$message.error(err)
                 this.loading = false

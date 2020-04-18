@@ -54,21 +54,22 @@
   import fs from 'fs'
   import path from 'path'
   const {ipcRenderer} = require('electron')
+  import GitHub from 'github-api'
 
   export default {
     name: 'index',
-    data() {
+    data () {
       return {
         searchText: '',
         title: ''
       }
     },
     computed: {
-      list() {
+      list () {
         return this.$store.state.dir.list
       }
     },
-    mounted() {
+    mounted () {
       var root = path.join(os.homedir(), '.config')
       this.treeData = [{
         type: 'dir',
@@ -80,12 +81,12 @@
       this.fileDir(root, this.treeData[0].children)
     },
     methods: {
-      init() {
+      init () {
         console.log(this.$store.state, 'list')
         console.log(this.$store.state.dir.list, 'list')
       },
       //  展开文件夹
-      openDir(data) {
+      openDir (data) {
         console.log(data)
         this.dirList = []
         if (data.type == 'dir' && data.name !== '我的文件夹') {
@@ -97,8 +98,8 @@
         }
       },
       //  遍历文件夹
-      fileDir(dirPath, arr) {
-        let filesList = fs.readdirSync(dirPath), j = 0;
+      fileDir (dirPath, arr) {
+        let filesList = fs.readdirSync(dirPath), j = 0
         for (let i = 0; i < filesList.length; i++) {
           // 拼接当前文件的路径(上一层路径+当前file的名字)
           let filePath = path.join(dirPath, filesList[i])
@@ -117,7 +118,7 @@
         }
       },
       //  遍历文件及文件夹
-      fileDisplay(dirPath, arr) {
+      fileDisplay (dirPath, arr) {
         var filesList = fs.readdirSync(dirPath)
         for (var i = 0; i < filesList.length; i++) {
           // 描述此文件/文件夹的对象
@@ -142,7 +143,7 @@
         }
       },
       // 组装目录路径
-      findFileDisplay(filesList, name, dirPath) {
+      findFileDisplay (filesList, name, dirPath) {
         for (var i = 0; i < filesList.length; i++) {
           // 拼接当前文件的路径(上一层路径+当前file的名字)
           if (filesList[i].type == 'dir') {
@@ -157,7 +158,7 @@
           }
         }
       },
-      pathBack() {
+      pathBack () {
         let arr = this.filePath.split('\\')
         arr.pop()
         this.filePath = arr.join('\\')
@@ -165,12 +166,12 @@
         this.fileDisplay(this.filePath, this.dirList)
         this.$store.dispatch('setDirList', this.dirList)
       },
-      close() {
+      close () {
         ipcRenderer.send('close')
       },
-      min() {
+      min () {
         ipcRenderer.send('min')
-      },
+      }
     }
   }
 </script>
