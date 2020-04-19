@@ -60,13 +60,6 @@
 </template>
 
 <script>
-  import GitHub from 'github-api'
-  import os from 'os'
-  import path from 'path'
-  import fs from 'fs'
-  // import Git from 'nodegit'
-  import {mkdirs} from '@/utils/file'
-
   const {ipcRenderer} = require('electron')
 
   export default {
@@ -99,82 +92,7 @@
       login (type) {
         this.$refs['login'].validate(valid => {
           if (valid) {
-            this.loading = true
-            // localStorage.user = JSON.stringify(this.form);
-            // this.$message({
-            //   type: "success",
-            //   message: "登录成功",
-            //   duration: 2000
-            // });
-            // ipcRenderer.send('openWindow')
-            let github
-            let user
-            if (type === 'token') {
-              github = new GitHub({token: this.form.token})
-            } else {
-              github = new GitHub({
-                username: this.form.username,
-                password: this.form.password
-              })
-            }
-            user = github.getUser()
-            user.getProfile((err, profile) => {
-              // this.loading = false;
-              if (!err) {
-                // 登录成功
-                console.log(profile)
-                // 初始化账号文件夹
-                // step1: 判断有没有UserDir/.GitNote/[account]/文件夹
-                let accountPath = path.join(os.homedir(), '.GitNote', profile.login)
-                if (!fs.existsSync(accountPath)) {
-                  // 不存在则创建,recursive递归创建
-                  mkdirs(accountPath, () => {
-                    console.log('文件夹创建成功')
-                    // step2: 查看该用户是否有[用户名]Note 仓库
-                    user.listRepos((err, repos) => {
-                      if (!err) {
-                        console.log(repos)
-                        let repoList = repos.filter(repo => repo.name === this.form.username + 'Notebook' && repo.owner.login)
-                        console.log(repoList, 'resList')
-                        if (!repoList.length) {
-                          console.log('创建仓库 && 克隆仓库')
-                          ipcRenderer.send('createRepo')
-                          // const repoInfo = {
-                          //   name: this.form.username + 'Notebook',
-                          //   auto_init: true
-                          // }
-                          // http://github-tools.github.io/github/docs/3.2.3/User.js.html#line211
-                          // https://developer.github.com/v3/repos/#create
-                          // TODO bug
-                          // user.createRepo(repoInfo, (err, repo) => {
-                          //   if (!err) {
-                          //     console.log(repo)
-                          //     console.log('开始克隆仓库')
-                          //     // Git.Clone(reporUrl, accountPath).then(repo => {
-                          //     //   console.log('克隆仓库完成', repo)
-                          //     // })
-                          //   }
-                          // })
-                        } else {
-                          console.log('开始克隆仓库')
-                          // Git.Clone(reporUrl, accountPath).then(repo => {
-                          //   console.log('克隆仓库完成', repo)
-                          // })
-                        }
-                      }
-                    })
-                  })
-                }
-                this.loading = false
-                // ipcRenderer.send('openWindow')
-
-              } else {
-                this.$message.error(err)
-                this.loading = false
-              }
-            }).catch(e => {
-              this.loading = false
-            })
+            ipcRenderer.send('login', this.form)
           }
         })
       },

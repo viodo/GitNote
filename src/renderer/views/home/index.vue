@@ -51,10 +51,10 @@
 
 <script>
   import os from 'os'
-  import fs from 'fs'
-  import path from 'path'
-  const {ipcRenderer} = require('electron')
-  import GitHub from 'github-api'
+import fs from 'fs'
+import path from 'path'
+import GitHub from 'github-api'
+const {ipcRenderer} = require('electron')
 
   export default {
     name: 'index',

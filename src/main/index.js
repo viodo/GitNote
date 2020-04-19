@@ -2,6 +2,7 @@
 
 import {app, BrowserWindow, Menu, ipcMain, shell} from 'electron'
 import '../renderer/store'
+import { login } from './utils/github'
 
 /**
  * Set `__static` path to static files in production
@@ -99,20 +100,10 @@ ipcMain.on('openUrl', (e, url) => {
   shell.openExternal(url)
 })
 
-let GitHub = require('github-api')
-ipcMain.on('createRepo', (e, url) => {
-  let github = new GitHub({
-    username: 'viodo',
-    password: 'cxc19941217'
-  })
-  let user = github.getUser()
-  let repoDef = {
-    name: 'test'
+ipcMain.on('login', (e, params) => {
+  if (login(params)) {
+    console.log('登录成功')
   }
-  user.createRepo(repoDef, (err, repo) => {
-    console.log(err)
-    console.log(repo)
-  })
 })
 
 /**
