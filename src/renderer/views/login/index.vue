@@ -68,8 +68,8 @@
       return {
         tabName: 'Token',
         form: {
-          username: 'viodo',
-          password: 'cxc19941217',
+          username: 'zqian11',
+          password: 'qian1125.',
           token: ''
         },
         formRules: {

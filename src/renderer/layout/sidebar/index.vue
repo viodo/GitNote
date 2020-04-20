@@ -27,7 +27,7 @@
   import os from 'os'
   import fs from 'fs'
   import path from 'path'
-
+  import GitHub from 'github-api'
   const {ipcRenderer, remote} = require('electron')
 
   export default {
@@ -46,6 +46,7 @@
       }
     },
     mounted () {
+      this.init()
       this.targetId = this.id
 
       // 设置根目录
@@ -60,6 +61,9 @@
       this.fileDir(root, this.treeData[0].children)
     },
     methods: {
+      init() {
+
+      },
       //  右键菜单
       rightClick (node, data) {
         console.log(node, data)

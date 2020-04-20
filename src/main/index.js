@@ -103,6 +103,8 @@ ipcMain.on('openUrl', (e, url) => {
 ipcMain.on('login', (e, params) => {
   if (login(params)) {
     console.log('登录成功')
+    mainWindow.hide()
+    openWindow()
   }
 })
 
