@@ -9,18 +9,23 @@ import store from '../../renderer/store'
  * @param params
  */
 export function login (params) {
-  console.log(params,store,'1111')
+  console.log(params, store, '1111')
   let github = new GitHub({
     username: params.username,
     password: params.password
   })
   let user = github.getUser()
-  store.dispatch('getUser',user) // 存入vuex
+  let accountPath
+  let repoName
+  let repoUrl
+
+  store.dispatch('getUser', user) // 存入vuex
   user.getProfile((err, profile) => {
     if (!err) {
       console.log('获取基本信息成功')
-      let accountPath = path.join(os.homedir(), '.GitNote', profile.login)
-      let repoName = params.username + 'Notebook'
+      accountPath = path.join(os.homedir(), '.gitnote', profile.login)
+      repoName = params.username + 'Notebook'
+      repoUrl = `https://github.com/${params.username}/${repoName}.git`
       // step1: 判断有没有UserDir/.GitNote/[account]/文件夹
       if (mkdirSync(accountPath)) {
         console.log('账号文件创建成功')
@@ -31,18 +36,19 @@ export function login (params) {
             let repoList = repos.filter(repo => repo.name === repoName && repo.owner.login)
             if (!repoList.length) {
               const repoDef = {
-                name: params.username + 'Notebook',
+                name: repoName,
                 auto_init: true,
                 gitignore_template: 'Node',
                 license_template: 'mit'
-              }
-              let repoUrl = `https://github.com/${params.username}/${repoName}.git`
+              }              
               user.createRepo(repoDef, (err, repo) => {
                 if (!err) {
                   console.log('创建仓库成功')
                   console.log('开始克隆仓库')
                   // TODO
-                  clone(repoUrl, accountPath)
+                  clone(repoUrl, path.join(accountPath, repoName)).then(res => {
+                    console.log('克隆仓库成功')
+                  })
                   return true
                 } else {
                   console.log('创建仓库失败')
@@ -51,8 +57,11 @@ export function login (params) {
               })
             } else {
               console.log('开始克隆仓库')
+              console.log(repoUrl)
               // TODO
-              clone(repoUrl, accountPath)
+              clone(repoUrl, path.join(accountPath, repoName)).then(res => {
+                console.log('克隆仓库成功')
+              })
               return true
             }
           } else {

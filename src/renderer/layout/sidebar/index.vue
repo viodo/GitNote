@@ -61,7 +61,7 @@
       this.fileDir(root, this.treeData[0].children)
     },
     methods: {
-      init() {
+      init () {
 
       },
       //  右键菜单
