@@ -37,10 +37,10 @@ export function login (params) {
             if (!repoList.length) {
               const repoDef = {
                 name: repoName,
-                auto_init: true,
-                gitignore_template: 'Node',
-                license_template: 'mit'
-              }              
+                auto_init: true
+                // gitignore_template: 'Node',
+                // license_template: 'mit'
+              }
               user.createRepo(repoDef, (err, repo) => {
                 if (!err) {
                   console.log('创建仓库成功')
