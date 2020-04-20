@@ -105,4 +105,7 @@ dist
 
 # Electron
 build
- 
+
+# idea
+.idea
+

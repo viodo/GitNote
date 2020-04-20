@@ -21,11 +21,55 @@ export function clone (url, path) {
 }
 
 /**
- * commitAndCommit
- * @param path
+ * commitAndPush
+ *
+ * @param repoUrl  仓库地址
+ * @param gitPath  .git文件夹地址
+ * @param filePath 新增文件的相对路径
+ * @param username 用户名
+ * @param password 密码
+ * @param email    邮箱
  */
-export function commitAndCommit (path) {
-  Git.Repository.open(path).then(repo => {
-
+export function commitAndPush (repoUrl, gitPath, filePath, username, password, email) {
+  let repo
+  let index
+  let oid
+  let remote
+  Git.Repository.open(gitPath).then(repoResult => {
+    repo = repoResult
+    return repo.refreshIndex()
+  }).then(indexResult => {
+    index = indexResult
+  }).then(() => {
+    return index.addByPath(filePath)
+  }).then(() => {
+    return index.write()
+  }).then(() => {
+    return index.writeTree()
+  }).then(oidResult => {
+    oid = oidResult
+    return Git.Reference.nameToId(repo, 'HEAD')
+  }).then(head => {
+    return repo.getCommit(head)
+  }).then(parent => {
+    let author = Git.Signature.now(username, email)
+    let committer = Git.Signature.now(username, email)
+    return repo.createCommit('HEAD', author, committer, 'message', oid, [parent])
+  }).then(() => {
+    return Git.Remote.createAnonymous(repo, repoUrl)
+  }).then(remoteResult => {
+    remote = remoteResult
+    return remote.push(
+      ['refs/heads/master:refs/heads/master'],
+      {
+        callbacks: {
+          credentials: function (url, userName) {
+            return Git.Cred.userpassPlaintextNew(username, password)
+          }
+        }
+      }
+    )
+  }).done(number => {
+    console.log('提交成功', number)
   })
 }
