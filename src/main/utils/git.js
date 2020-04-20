@@ -73,3 +73,32 @@ export function commitAndPush (repoUrl, gitPath, filePath, username, password, e
     console.log('提交成功', number)
   })
 }
+
+/**
+ * 更新仓库
+ *
+ * @param repoPth 仓库地址(绝对地址)
+ * @param username 用户名
+ * @param password 密码
+ */
+export function pull (repoPth, username, password) {
+  let repository
+  // Open a repository that needs to be fetched and fast-forwarded
+  Git.Repository.open().then(function (repo) {
+    repository = repo
+    return repository.fetchAll({
+      callbacks: {
+        credentials: function (url, userName) {
+          return Git.Cred.userpassPlaintextNew(username, password)
+        },
+        certificateCheck: function () {
+          return 0
+        }
+      }
+    })
+  }).then(function () {
+    return repository.mergeBranches('master', 'origin/master')
+  }).done(function () {
+    console.log('Done!')
+  })
+}
