@@ -7,8 +7,9 @@ import Git from 'nodegit'
  * @param path 克隆地址
  * @returns {Promise<unknown>}
  */
-export function clone (url, path) {
+export function clone(url, path) {
   return new Promise((resolve, reject) => {
+    console.log(url, path)
     Git.Clone(url, path).then(function (repo) {
       // Use a known commit sha from this repository.
       console.log('克隆完成')
@@ -30,7 +31,7 @@ export function clone (url, path) {
  * @param password 密码
  * @param email    邮箱
  */
-export function commitAndPush (repoUrl, gitPath, filePath, username, password, email) {
+export function commitAndPush(repoUrl, gitPath, filePath, username, password, email) {
   let repo
   let index
   let oid
@@ -81,7 +82,7 @@ export function commitAndPush (repoUrl, gitPath, filePath, username, password, e
  * @param username 用户名
  * @param password 密码
  */
-export function pull (repoPth, username, password) {
+export function pull(repoPth, username, password) {
   let repository
   // Open a repository that needs to be fetched and fast-forwarded
   Git.Repository.open().then(function (repo) {

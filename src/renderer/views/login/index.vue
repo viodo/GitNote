@@ -41,6 +41,7 @@
                                        :disabled="loading"></el-button>
                         </el-form-item>
                     </el-form>
+                    <p>{{loginState}}</p>
                 </el-tab-pane>
             </el-tabs>
 
@@ -86,6 +87,11 @@
         isAutoLogin: false,
         loading: false,
         mainWindow: ''
+      }
+    },
+    computed:{
+      loginState() {
+        return this.$store.state.dir.cloneState
       }
     },
     methods: {
